@@ -8,11 +8,13 @@ module SignExtender #(
 
 );
 
-always_comb
+always_comb begin
     case (ImmSrc)
-        if(ImmSrc==2'b0)        ImmExt = {{20{Instr[12]}},Instr[WIDTH-1:20]}
-        else if(ImmSrc==2'b01)  ImmExt = {{20{Instr[12]}},Instr[WIDTH-1:25],Instr[11:7]}
-        else if(ImmSrc==2'b10)  ImmExt = {21{Instr[12]},Instr[10:5],Instr[4:1],Instr[11]}
-        else    ImmExt = {12{Instr[WIDTH-1]},Instr[WIDTH-1:12]} or ImmExt = {11{Instr[20]},Instr[20],Instr[10:1],Instr[11],Instr[19:12]}
-
+        2'b00: ImmExt = {{20{Instr[31]}},Instr[WIDTH-1:20]};
+        2'b01: ImmExt = {{20{Instr[31]}},Instr[WIDTH-1:25],Instr[11:7]};
+        2'b10: ImmExt = {{20{Instr[31]}},Instr[7],Instr[30:25],Instr[11:8],1'b0};
+        2'b11: ImmExt = {Instr[WIDTH-1:12],12'b0};
+        default: ImmExt = {{12{Instr[31]}},Instr[19:12],Instr[20],Instr[30:21],1'b0}};
+    endcase
+end
 endmodule
