@@ -1,0 +1,78 @@
+# THIS IS NOT A WORKING VERSION SINCE IT HAS NOT INTERGRATE THE FUNCTION TO IMPORT A SEED FOR RANDOM NUMBER GENERATION THROUGH VBUDDY BUTTON PRESS YET
+# FOR WHICH WE WILL DO A COUNTER THAT STARTS WHEN VBUDDY IS TURNED ON. WHEN THE TRIGGER (BUTTON) IS PRESSED, THE F1 FSM WILL START, AND THE CURRENT COUNTER OUTPUT
+# WILL BE THE SEED FOR RANDOM NUMBER GENERATOR.
+# THERE ARE ALSO SOME MINOR ISSUES WITHIN THIS CODE SUCH AS THE RET (WHICH IS A PSEUDO CODE BUT NOT A RISV-V INSTRUCTION). A REFINED VERSION WILL BE UPLOADED LATER,
+# AND THIS IS ONLY TO GIVE US A CONCEPT OF HOW WE WILL CHANGE THE CPU STRUCTURE, NAMELY: AN A-REGISTER WILL BE USED TO RECIEVE AN INPUT FROM VBUDDY BUTTON PRESS, WHICH WILL REQUIRE
+# CHANGE IN THE IMPLEMENTATION.
+
+# Specifically, we will use vbdflag to recieve an input from the vbuddy, which will be put into the cpu asynchronously by something like top->trigger = vbdFlag(); This will start the rest of the program.
+
+
+
+
+# here is a list that defines the regs
+# t0: current light stat（1, 11, 111, ..., 1111_1111）
+# a0: final light stat,（0xFF，or 0b1111_1111）
+# a2: rst (to restart the program)
+# t3: rand value
+# t4: delay counter (for 1 sec delay)
+# a1: random delay counter (for the final random delay before turning all lights off)
+# a2: scale parameter, used to transfer cpu timescale to real-life time
+# t6, t7: temp reg
+
+# t2: trigger signal reg (likely not needed)
+
+# 初始化 FSM 状态机
+init:
+    addi t0, x0, 0          # init light status (and turn on the first light) (t0 = 0)
+    addi a0, x0, 0xFF       # final light stat (a0 = 0xFF)
+    addi t3, x0, seed       # rand seed, notice that the seed must be input from external source
+
+    addi t2, x0, 0          # trigger (likely not needed)
+
+'''
+# wait for trigger (which is probably not needed)
+trigger_check:
+    beq t2 x0, trigger_check
+    jal x0, main
+'''
+
+# main (FSM main loop to turn on lights)
+main:
+    # light turn on loop, note that t7 is used to save current light status and it will be the output
+    addi t6, t0, 0          # t7 to save current light status
+    jal x1, delay           # go to delay function to simulate 1 sec delay
+    slli t0, t0, 1          # same as below
+    addi t0, t0, 1          # *2+1 to get new light status
+    bne t0, a0, init        # restart the program if rst is on
+    bne t0, a0, main        # if t0 is not 0xFF yet then continue the loop
+
+# rand_delay after all lights are turned on
+all_lights_on:
+    jal x1, random_delay    # go to random delay function
+    addi t0, x0, 0          # turn off all lights
+    jal x0, init            # go back to init value
+
+
+delay:
+    addi t4, x0, 16    # set counter value
+    mul t4, t4, SCALE   # scale it to 1 second
+delay_loop:
+    addi t4, t4, -1         # delay -1
+    bne t0, a0, init        # restart the program if rst is on
+    bne t4, x0, delay_loop  # continue delay loop if counter is not 0 yet
+    ret                     # return to previous position (jal x1, delay           # go to delay function to simulate 1 sec delay)
+
+
+random_delay:
+    # pseudo LFSR algorithm in assembly, logic same to the one in lab_3
+    srli t7, t3, 1
+    andi t6, t3, 1
+    xor t7, t7, t6
+    addi t3, t7, 0
+    andi a1, t7, 0xFF       # take lowest 8 digit of rand value and put it to a1
+    mul a1, a1, SCALE       # scale the random delay to reasonable value
+random_delay_loop:
+    addi a1, x5, -1         # random delay -1
+    bne a1, x0, random_delay_loop  # continue loop if rand_delay count is no 0 yet
+    ret                     # return to previous position (jal x1, random_delay    # go to random delay function)
