@@ -11,7 +11,7 @@ module datamemory#(
 );
 
 logic [WIDTH-1:0] ReadData;
-logic [WIDTH-1:0] memory [WIDTH-1:0]
+logic [WIDTH-1:0] memory [WIDTH-1:0];
 
 //asynchronous cycle
 //read operation as it automatic (clk can be ignored)
