@@ -16,7 +16,7 @@ logic [WIDTH-1:0] memory [WIDTH-1:0];
 //asynchronous cycle
 //read operation as it automatic (clk can be ignored)
 always_comb begin
-    ReadData <= memory[ALUResult[4:0]];
+    ReadData = memory[ALUResult[4:0]];
 end
  
 //synchronous cycle
