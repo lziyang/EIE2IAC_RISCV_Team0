@@ -11,19 +11,19 @@ module datamemory#(
 );
 
 logic [WIDTH-1:0] ReadData;
-logic [WIDTH-1:0] memory [WIDTH-1:0];
+logic [WIDTH-1:0] memory [2**WIDTH-1:0];
 
 //asynchronous cycle
 //read operation as it automatic (clk can be ignored)
 always_comb begin
-    ReadData = memory[ALUResult[4:0]];
+    ReadData = memory[ALUResult[4:0]]; 
 end
  
 //synchronous cycle
 //write operation as it is posedge clk triggered
 always_ff @(posedge clk) begin
     if(MemWrite) begin
-        memory[ALUResult[4:0]] <= WriteData;
+        memory[ALUResult[4:0]] <= WriteData; //writing the data into memory address' value
     end
 end
 
