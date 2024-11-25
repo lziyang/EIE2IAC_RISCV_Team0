@@ -1,4 +1,4 @@
-module RegFile (
+module RegisterFile (
     input logic clk,
     input logic [31:0] instr,
     input logic [4:0] A1,
