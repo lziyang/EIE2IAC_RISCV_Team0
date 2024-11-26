@@ -2,12 +2,14 @@ module InstructionMemory(
     input logic [31:0] pc,
     output logic [31:0] instruction
 );
-    logic [31:0] program_memory [0:255];
+    // 256 command * 4 byte per command = 1024 bytes
+    logic [7:0] memory [0:1023];
 
-    // Initialize memory
+    // _init
     initial begin
-        $readmemh("program.hex", program_memory); // Load instructions from program.hex
+        $readmemh("program.hex", memory); // load from program.hex, so change this to test out assembly
     end
 
-    assign instruction = program_memory[pc[9:2]]; // Use PC[9:2] as index
+    // little endian
+    assign instruction = {memory[pc + 3], memory[pc + 2], memory[pc + 1], memory[pc]};
 endmodule
