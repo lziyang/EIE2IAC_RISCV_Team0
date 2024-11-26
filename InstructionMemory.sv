@@ -13,3 +13,4 @@ module InstructionMemory(
     // little endian
     assign instruction = {memory[pc + 3], memory[pc + 2], memory[pc + 1], memory[pc]};
 endmodule
+
