@@ -50,18 +50,10 @@ always_ff @(posedge clk) begin
                 memory[address+2] <= WriteData[23:16];
                 memory[address+3] <= WriteData[31:24];
             end               
-            2'b01: begin
-                case(ALUResult[1])                  //sh
-                    1'b0: begin //separating lower half with 2 bytes
-                        memory[address] <= WriteData[7:0];
-                        memory[address+1] <= WriteData[15:8];
-                    end
-                    1'b1: begin //separating upper half with 2 bytes
-                        memory[address+2] <= WriteData[7:0];
-                        memory[address+3] <= WriteData[15:8];
-                    end
-                endcase 
-            end            
+            2'b01: begin                //sh
+                memory[address] <= WriteData[7:0];
+                memory[address+1] <= WriteData[15:8];
+            end         
             2'b10: begin              //sb
                 memory[address] <= WriteData[7:0];      
             end                
