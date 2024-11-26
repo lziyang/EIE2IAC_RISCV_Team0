@@ -17,7 +17,8 @@ module ControlUnit (
     output logic RegWrite,          // Register write enable
 
     // below is new output
-    output logic ALUSrcA         // ALU srcA (this is to input PC into ALU)
+    output logic ALUSrcA,         // ALU srcA (this is to input PC into ALU)
+    output logic [2:0] DataControl  // Goes into data handler, functions exactly the same as Funct3
 );
 
 always_comb begin
@@ -101,6 +102,7 @@ always_comb begin
         PCSrc = 2'b00;
         ALUControl = 4'b0000;
         ImmSrc = 2'b00;
+        DataControl = funct3; // NEWLY ADDED: Store DataControl = funct3
     end
 
     // S command
@@ -113,6 +115,7 @@ always_comb begin
         PCSrc = 2'b00;
         ALUControl = 4'b0000;
         ImmSrc = 2'b01;
+        DataControl = funct3; // NEWLY ADDED: Store DataControl = funct3
     end
 
     // B command
