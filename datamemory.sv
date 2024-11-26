@@ -27,13 +27,13 @@ always_comb begin
         2'b01: begin                                                          //lh and lhu
             case(LoadSign)                                                      
                 1'b0: ReadData = {{16'b0}, memory[address][15:0]};
-                1'b1: ReadData = {{16{ALUResult[15]}}, memory[address][15:0]};
+                1'b1: ReadData = {{16{memory[address][15]}}, memory[address][15:0]};
             endcase
         end
         2'b10: begin                                                          //lb and lbu
             case(LoadSign)
                 1'b0: ReadData = {{24'b0}, memory[address][7:0]};
-                1'b1: ReadData = {{24{ALUResult[7]}}, memory[address][7:0]}; 
+                1'b1: ReadData = {{24{memory[address][7]}}, memory[address][7:0]};
             endcase
         end
     endcase
