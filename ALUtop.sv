@@ -6,9 +6,7 @@ module ALUTOP (
     input logic RegWrite,
     input logic ALUsrc,
     input logic [2:0] ALUctrl,
-    input logic [31:0] ImmOp,
-    output logic EQ,
-    output logic [31:0] a0
+    input logic [31:0] ImmOp
 );
 
     logic [31:0] ALUop1;
@@ -18,12 +16,11 @@ module ALUTOP (
 
 RegFile RegFile (
     .clk(clk),
-    .AD1(rs1),
-    .AD2(rs2),
-    .AD3(rd),
+    .A1(rs1),
+    .A2(rs2),
+    .A3(rd),
     .WD3(ALUout),
     .WE3(RegWrite),
-    .a0(a0),
     .RD1(ALUop1),
     .RD2(regOp2)
 );
@@ -39,8 +36,7 @@ ALUBlock ALUBlock (
     .ALUop1(ALUop1),
     .ALUop2(ALUop2),
     .ALUctrl(ALUctrl),
-    .SUM(ALUout),
-    .EQ(EQ)
+    .SUM(ALUout)
 );
 
 endmodule
