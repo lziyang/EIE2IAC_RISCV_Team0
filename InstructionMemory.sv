@@ -1,16 +1,18 @@
 module InstructionMemory(
-    input logic [31:0] pc,
-    output logic [31:0] instruction
+    input logic [31:0] PC,        
+    output logic [31:0] Instr
 );
-    // 256 command * 4 byte per command = 1024 bytes
-    logic [7:0] memory [0:1023];
 
-    // _init
+    logic [7:0] Instr_memory [2**12-1:0]; // 4 KB instruction memory (0x1000 bytes)
+
     initial begin
-        $readmemh("program.hex", memory); // load from program.hex, so change this to test out assembly
+        $readmemh("program.hex", Instr_memory); // Load instructions from a hex file
     end
 
-    // little endian
-    assign instruction = {memory[pc + 3], memory[pc + 2], memory[pc + 1], memory[pc]};
-endmodule
+    // Check if PC is in the valid range
+    logic ValidAddr;
+    assign ValidAddr = (PC[31:12] == 20'hBFC00); // Only accept addresses in 0xBFC00000–0xBFC00FFF
 
+    // Fetch instruction only if address is valid, 0 otherwise
+    assign Instr = ValidAddr ? {Instr_memory[PC[11:0] + 3], Instr_memory[PC[11:0] + 2], Instr_memory[PC[11:0] + 1], Instr_memory[PC[11:0]]} : 32'b0;
+endmodule
