@@ -71,11 +71,13 @@ all_lights_on:
 #--------------------------------------------
 delay:
     # scale is in a2
-    addi t4, x0, 1         # set counter init value, this could be changed, we set (t4 = 1) for now to ease the testing
-    mul t4, t4, a2          # t4 = t4 * SCALE
+    addi t4, x0, 1         # t4 = 1
+    # t4 = t4 * a2 without mul
+    # Notice that we can simplify since t4 is 1: t4 = a2 (I think?)
+    add t4, x0, a2         # t4 = a2
 
 delay_loop:
-    addi t4, t4, -1         # t4 = t4 - 1，counter += -1
+    addi t4, t4, -1         # t4 = t4 - 1，counter -= 1
 
     # check for rst even during the waiting
     bne a3, x0, init        # if rst != 0, go back to init
@@ -86,17 +88,34 @@ delay_loop:
 # random delay LFSR
 #--------------------------------------------
 
-random_delay:               # please check if it works, i think it does.
+random_delay:
     srli t7, t3, 1          # t7 = t3 >> 1
     andi t6, t3, 1          # t6 = t3 & 1，get the lowest bit
     xor t7, t7, t6          # t7 = t7 ^ t6，update the random number
     addi t3, t7, 0          # update t3
     andi a1, t7, 0xFF       # a1 = t7 & 0xFF，get the lowest 8 bits
-    mul a1, a1, a2          # a1 = a1 * SCALE，expand the random delay based on scale
+
+    # Replace mul a1, a1, a2 in the original file (check archive) with a loop
+    # Multiply a1 by a2 without using mul, then initialize result to 0
+    add t6, x0, x0          # t6 = 0, result
+    add t5, a2, x0          # t5 = a2, copy of multiplier
+
+multiply_loop_random_delay:
+    beq t5, x0, multiply_end_random_delay   # if t5 == 0, end
+    andi t7, t5, 1             # t7 = t5 & 1
+    beq t7, x0, skip_add_random_delay       # if t7 == 0, skip addition
+    add t6, t6, a1             # t6 += a1
+skip_add_random_delay:
+    slli a1, a1, 1             # a1 <<= 1
+    srli t5, t5, 1             # t5 >>= 1
+    jal x0, multiply_loop_random_delay
+
+multiply_end_random_delay:
+    add a1, t6, x0             # a1 = result
 
 random_delay_loop:
-    addi a1, a1, -1         # a1 = a1 - 1，random counter -= 1
-    # check for rst (a3), notice that we check it during all poossible loop
+    addi a1, a1, -1         # a1 = a1 - 1, in other words: random counter -= 1
+    # check for rst (a3)
     bne a3, x0, init        # go back to init if rst != 0
-    bne a1, x0, random_delay_loop  # if a1 is none-zero continue the random wating
+    bne a1, x0, random_delay_loop  # if a1 is not zero, continue waiting
     ret                     # go back
