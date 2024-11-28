@@ -25,9 +25,9 @@ module ALU(
             4'b0101: SUM = (SrcA < SrcB) ? 1 : 0;
             4'b0110: SUM = ($signed(SrcA) < $signed(SrcB)) ? 1 : 0;
             4'b0111: SUM = SrcB;
-            4'b1000: SUM = SrcA << SrcB;
-            4'b1001: SUM = SrcA >> SrcB;
-            4'b1010: SUM = SrcA >>> SrcB;   
+            4'b1000: SUM = SrcA << SrcB[4:0];
+            4'b1001: SUM = SrcA >> SrcB[4:0];
+            4'b1010: SUM = $signed(SrcA) >>> SrcB[4:0];   
             default: SUM = 0;                     
         endcase
     end
