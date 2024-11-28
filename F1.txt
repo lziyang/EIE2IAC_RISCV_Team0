@@ -119,3 +119,4 @@ random_delay_loop:
     bne a3, x0, init        # go back to init if rst != 0
     bne a1, x0, random_delay_loop  # if a1 is not zero, continue waiting
     ret                     # go back
+
