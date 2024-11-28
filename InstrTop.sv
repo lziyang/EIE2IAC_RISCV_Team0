@@ -14,16 +14,25 @@ module InstrTop (
     output logic [1:0] SizeSrc,
     output logic LoadSign
 );
-
     logic [6:0] op;
     logic [2:0] ImmSrc;
     logic [31:7] ImmIn;
     logic [2:0] funct3;
     logic [6:0] funct7;
 
+    // newly added, define the instr mem bytes
+    logic [7:0] Instr_memory [0:2**12-1];
+
+    // HexFileLoader
+    HexFileLoader HexFileLoader (
+        .Instr_memory(Instr_memory)
+    );
+
+    // Altered InstructionMemory
     InstructionMemory InstructionMemory (
         .PC(PC),
-        .Instr(Instr)
+        .Instr(Instr),
+        .Instr_memory(Instr_memory)
     );
 
     ControlUnit ControlUnit (
@@ -54,6 +63,4 @@ module InstrTop (
     assign ImmIn = Instr[31:7];
     assign funct3 = Instr[14:12];
     assign funct7 = Instr[31:25];
-
 endmodule
-
