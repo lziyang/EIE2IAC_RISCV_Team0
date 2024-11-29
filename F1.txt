@@ -8,8 +8,7 @@
 # t3: random value seed (and random value itself).
 # t4: delay counter for 1 sec delay
 # t5: seed counter to generate seed
-# t6, t7: temp reg
-# t2: this is saved for debugging purpose
+# t6, t2: temp reg
 
 #--------------------------------------------
 # _init
@@ -89,11 +88,11 @@ delay_loop:
 #--------------------------------------------
 
 random_delay:
-    srli t7, t3, 1          # t7 = t3 >> 1
+    srli t2, t3, 1          # t2 = t3 >> 1
     andi t6, t3, 1          # t6 = t3 & 1，get the lowest bit
-    xor t7, t7, t6          # t7 = t7 ^ t6，update the random number
-    addi t3, t7, 0          # update t3
-    andi a1, t7, 0xFF       # a1 = t7 & 0xFF，get the lowest 8 bits
+    xor t2, t2, t6          # t2 = t2 ^ t6，update the random number
+    addi t3, t2, 0          # update t3
+    andi a1, t2, 0xFF       # a1 = t2 & 0xFF，get the lowest 8 bits
 
     # Replace mul a1, a1, a2 in the original file (check archive) with a loop
     # Multiply a1 by a2 without using mul, then initialize result to 0
@@ -102,8 +101,8 @@ random_delay:
 
 multiply_loop_random_delay:
     beq t5, x0, multiply_end_random_delay   # if t5 == 0, end
-    andi t7, t5, 1             # t7 = t5 & 1
-    beq t7, x0, skip_add_random_delay       # if t7 == 0, skip addition
+    andi t2, t5, 1             # t2 = t5 & 1
+    beq t2, x0, skip_add_random_delay       # if t2 == 0, skip addition
     add t6, t6, a1             # t6 += a1
 skip_add_random_delay:
     slli a1, a1, 1             # a1 <<= 1
@@ -119,4 +118,3 @@ random_delay_loop:
     bne a3, x0, init        # go back to init if rst != 0
     bne a1, x0, random_delay_loop  # if a1 is not zero, continue waiting
     ret                     # go back
-
