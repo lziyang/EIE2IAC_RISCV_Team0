@@ -17,9 +17,8 @@ module RegisterFile (
     assign a0 = registerarr[10];
 
     always_ff @(posedge clk) begin
-        if (WE3) begin
+        if (WE3 && A3 != 0) begin //added x0 check so never change x0
             registerarr[A3] <= WD3;
-            registerarr[10] <=registerarr[A3];
         end
     end
 

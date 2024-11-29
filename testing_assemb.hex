@@ -1,0 +1,80 @@
+    .section .text
+    .globl _start
+_start:
+    # 初始化寄存器
+    addi x5, x0, 11       # t0 = 11 (0x0B)
+    addi x6, x0, 255      # a0 = 255 (0xFF)
+    addi x7, x0, 0        # a1 = 0
+    addi x8, x0, 16       # a2 = 16
+    addi x9, x0, 0        # a3 = 0
+    addi x10, x0, 0       # a4 = 0
+    addi x11, x0, 11      # t3 = 11
+
+    # 测试addi指令
+    addi x12, x5, 5       # x12 = x5 + 5 = 16
+
+    # 测试andi指令
+    andi x13, x6, 0x0F    # x13 = x6 & 0x0F = 0x0F
+
+    # 测试slli指令
+    slli x14, x5, 2       # x14 = x5 << 2
+
+    # 测试srli指令
+    srli x15, x6, 2       # x15 = x6 >> 2
+
+    # 测试srai指令
+    srai x16, x6, 2       # x16 = x6 >> 2 (算术右移)
+
+    # 测试beq指令
+    beq x5, x5, label_beq # 应该跳转
+    addi x17, x0, 0       # 如果不跳转，x17 = 0
+label_beq:
+    addi x17, x0, 1       # 如果跳转，x17 = 1
+
+    # 测试bne指令
+    bne x5, x6, label_bne # 应该跳转
+    addi x18, x0, 0       # 如果不跳转，x18 = 0
+label_bne:
+    addi x18, x0, 1       # 如果跳转，x18 = 1
+
+    # 测试jal指令
+    jal x19, label_jal    # x19 = 返回地址
+    addi x20, x0, 0       # 这行应该被跳过
+label_jal:
+    addi x20, x0, 1       # x20 = 1
+
+    # 测试jalr指令
+    la x21, label_jalr
+    jalr x0, 0(x21)       # 跳转到label_jalr
+    addi x22, x0, 0       # 这行应该被跳过
+label_jalr:
+    addi x22, x0, 1       # x22 = 1
+
+    # 测试ret指令（jalr x0, x1, 0）
+    jal x1, ret_test      # x1 = 返回地址
+    nop                   # 占位符
+ret_test:
+    addi x23, x0, 1       # x23 = 1
+    ret                   # 返回
+
+    # 测试add指令
+    add x24, x5, x6       # x24 = x5 + x6
+
+    # 测试sub指令
+    sub x25, x6, x5       # x25 = x6 - x5
+
+    # 测试xor指令
+    xor x26, x5, x6       # x26 = x5 ^ x6
+
+    # 测试and指令
+    and x27, x5, x6       # x27 = x5 & x6
+
+    # 测试or指令
+    or x28, x5, x6        # x28 = x5 | x6
+
+    # 测试lui指令
+    lui x29, 0x12345      # x29 = 0x12345000
+
+    # 程序结束，进入死循环
+end:
+    j end

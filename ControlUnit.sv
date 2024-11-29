@@ -69,6 +69,8 @@ always_comb begin
         MemWrite = 0;
         ResultSrc = 2'b00;
         PCSrc = 2'b00;
+
+        // Default value for ImmSrc
         ImmSrc = 3'b000;
 
         case (funct3)
@@ -78,8 +80,12 @@ always_comb begin
             3'b111: ALUControl = 4'b0010; // ANDI
             3'b010: ALUControl = 4'b0110; // SLTI
             3'b011: ALUControl = 4'b0101; // SLTIU
-            3'b001: ALUControl = 4'b1000; // SLLI
-            3'b101: begin
+            3'b001: begin // SLLI
+                ImmSrc = 3'b101;
+                ALUControl = 4'b1000;
+            end
+            3'b101: begin // SRAI or SRLI
+                ImmSrc = 3'b101;
                 if (funct7[5] == 1'b1)
                     ALUControl = 4'b1010; // SRAI
                 else
@@ -133,7 +139,7 @@ always_comb begin
         RegWrite = 0;
         ALUSrc = 1;
         MemWrite = 1;
-        ResultSrc = 2'b??;
+        ResultSrc = 2'b00; // again, set dont care to default value
         PCSrc = 2'b00;
         ALUControl = 4'b0000;
         ImmSrc = 3'b001;
@@ -152,7 +158,7 @@ always_comb begin
         RegWrite = 0;
         ALUSrc = 0;
         MemWrite = 0;
-        ResultSrc = 2'bx;
+        ResultSrc = 2'b00; // techinically dont care, but we set it to default value
         ImmSrc = 3'b010;
         ALUControl = 4'b0001;
 

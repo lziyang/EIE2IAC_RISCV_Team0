@@ -4,7 +4,8 @@ module DataMemory(
     input logic                LoadSign,  // differentiates between zero extension (0) and sign extension (1)
     input logic [1:0]          SizeSrc,   // determines if it is byte/word/half
     input logic [31:0]         WriteData, //data to be written to memory for store operations
-    input logic [16:0]         ALUResult, //memory address for read/write operators
+    input logic [31:0]         ALUResult, //memory address for read/write operators
+    // 修复了aluresult期待16：0的bug
     output logic [31:0]        ReadData
 );
 
@@ -14,7 +15,7 @@ logic [16:0]       address;
 //asynchronous cycle
 //read operation as it automatic (clk can be ignored)
 
-assign address = ALUResult; 
+assign address = ALUResult[16:0]; 
 
 always_comb begin
     case(SizeSrc)

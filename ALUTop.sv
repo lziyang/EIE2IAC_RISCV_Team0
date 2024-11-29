@@ -11,6 +11,7 @@ module ALUTop (
     input logic [31:0] PCPlus4,
     input logic LoadSign,
     input logic [1:0] SizeSrc,
+    input logic [1:0] ResultSrc, // 加入resultsrc
     output logic Zero,
     output logic unsignedLess,
     output logic signedLess,
@@ -23,7 +24,6 @@ module ALUTop (
     logic [31:0] ALUResult;
     logic [31:0] ReadData;
     logic [31:0] WriteData;
-    logic [1:0] ResultSrc;
     logic [31:0] Result;
 
 RegisterFile RegisterFile (
@@ -57,7 +57,7 @@ ALU ALU (
     .SrcA(SrcA),
     .SrcB(SrcB),
     .ALUControl(ALUControl),
-    .SUM(ALUResult),
+    .ALUResult(ALUResult),
     .Zero(Zero),
     .unsignedLess(unsignedLess),
     .signedLess(signedLess)

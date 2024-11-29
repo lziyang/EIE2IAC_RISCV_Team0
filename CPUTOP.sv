@@ -10,8 +10,8 @@ module CPUTOP (
     logic [31:0] ImmExt;
     logic RegWrite;
     logic ALUSrc;
-    logic PCSrc;
-    logic [2:0] ALUControl;
+    logic [1:0] PCSrc;
+    logic [3:0] ALUControl;
     logic Zero;
     logic [31:0] ALUout;
     logic [31:0] SrcA;
@@ -43,7 +43,8 @@ module CPUTOP (
         .PCSrc(PCSrc),
         .ImmExt(ImmExt),
         .PC(PC),
-        .PCJALR(PCJALR)
+        .PCJALR(PCJALR),
+        .PCPlus4(PCPlus4) // 引入了PCPLUS4
     );
 
     // Instantiate InstrTop
@@ -76,6 +77,7 @@ module CPUTOP (
         .PCPlus4(PCPlus4),
         .unsignedLess(unsignedLess),
         .signedLess(signedLess),
+        .ResultSrc(ResultSrc), // 传递 ResultSrc
         .Zero(Zero),
         .a0(a0)
     );
