@@ -15,7 +15,8 @@ module ALUTop (
     output logic Zero,
     output logic unsignedLess,
     output logic signedLess,
-    output logic [31:0] a0
+    output logic [31:0] a0,
+    output logic [31:0] ResultExt
 );
 
     logic [31:0] SrcA;
@@ -25,6 +26,9 @@ module ALUTop (
     logic [31:0] ReadData;
     logic [31:0] WriteData;
     logic [31:0] Result;
+
+    assign ResultExt = Result;
+
 
 RegisterFile RegisterFile (
     .clk(clk),
@@ -72,5 +76,7 @@ DataMemory DataMemory (
         .ALUResult(ALUResult),
         .ReadData(ReadData)
     );
+
+    assign WriteData = RD2;
 
 endmodule
