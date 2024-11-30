@@ -56,8 +56,4 @@ always_ff @(posedge clk or posedge rst) begin
     end
 end
 
-//Hit MUX
-assign Hit = valid[Set] && (Tag == tag_cache[Set]);
-assign Data = Hit ? data_cache[Set]:32'b0; //returns the value 0 if there is no data 
-
 endmodule
