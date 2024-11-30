@@ -16,7 +16,7 @@ module DirectMemcache#(
 //using word addressing (can change but should still be compatible with data memory)
 //have not included what happens when a miss occurs
 logic valid [NUM_SET-1:0];       //valid bit array
-logic [31:0] memory [2**31:0]; //used to access data in memory address
+logic [31:0] memory [2**31:0]; //maybe make the memory smaller than 31 bits? - Max is 1GB
 logic [26:0] tag_cache [NUM_SET-1:0]; //tag array        
 logic [31:0] data_cache [NUM_SET-1:0]; //data array
 
@@ -50,7 +50,7 @@ always_ff @(posedge clk or posedge rst) begin
     end
     else if (MemWriteM) begin //writing into cache
         //if cache is full, data would be replaced with new
-        valid[Set] <= 1'b0;         //valid = 1 
+        valid[Set] <= 1'b1;         //valid = 1 
         tag_cache[Set] <= Tag;      // Tag is now in set
         data_cache[Set] <= WriteDataM; //Data with the corresponding Tag
     end
