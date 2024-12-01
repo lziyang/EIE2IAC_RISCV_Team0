@@ -21,9 +21,10 @@ init:
     addi t5, x0, 0          # seed counter
 
 
+    # 触发信号寄存器初始化
     addi a4, x0, 0          # trigger
     
-    #a2 (SCALE) and a3 (rst) 
+    # 注意，a2 (SCALE) and a3 (rst) 至少部分是由外部因素决定的，特别是rst可能会由某个外部方式来进行输入？暂时留白
     addi a2, x0, 16            # a2 (scale) will be set based on time_scale. For not set it as 16 to simplify testing
     addi a3, x0, 0             # a3 rst is set to 0 as default
 
