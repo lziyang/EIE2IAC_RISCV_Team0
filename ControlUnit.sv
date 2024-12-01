@@ -11,7 +11,8 @@ module ControlUnit (
     output logic [1:0] ResultSrc,
     output logic MemWrite,
     output logic [3:0] ALUControl,
-    output logic ALUSrc,          
+    output logic ALUSrcA,
+    output logic ALUSrcB,          
     output logic [2:0] ImmSrc,     
     output logic RegWrite,
 
@@ -21,7 +22,8 @@ module ControlUnit (
 
 always_comb begin
     RegWrite = 0;
-    ALUSrc = 0;
+    ALUSrcA = 0;
+    ALUSrcB = 0;
     MemWrite = 0;
     ResultSrc = 2'b00;
     PCSrc = 2'b00;
@@ -35,7 +37,8 @@ always_comb begin
         //R type
         7'b0110011: begin
         RegWrite = 1;
-        ALUSrc = 0;
+        ALUSrcA = 0;
+        ALUSrcB = 0;
         MemWrite = 0;
         ResultSrc = 2'b00;
         PCSrc = 2'b00;
@@ -65,7 +68,8 @@ always_comb begin
     //I type
     7'b0010011: begin
         RegWrite = 1;
-        ALUSrc = 1;
+        ALUSrcA = 0;
+        ALUSrcB = 1;
         MemWrite = 0;
         ResultSrc = 2'b00;
         PCSrc = 2'b00;
@@ -98,7 +102,8 @@ always_comb begin
     // Load Instr I type
     7'b0000011: begin
         RegWrite = 1;
-        ALUSrc = 1;
+        ALUSrcA = 0;
+        ALUSrcB = 1;
         MemWrite = 0;
         ResultSrc = 2'b01;
         PCSrc = 2'b00;
@@ -137,7 +142,8 @@ always_comb begin
     // S type
     7'b0100011: begin
         RegWrite = 0;
-        ALUSrc = 1;
+        ALUSrcA = 0;
+        ALUSrcB = 1;
         MemWrite = 1;
         ResultSrc = 2'b00; // again, set dont care to default value
         PCSrc = 2'b00;
@@ -156,7 +162,8 @@ always_comb begin
     // B type
     7'b1100011: begin
         RegWrite = 0;
-        ALUSrc = 0;
+        ALUSrcA = 0;
+        ALUSrcB = 0;
         MemWrite = 0;
         ResultSrc = 2'b00; // techinically dont care, but we set it to default value
         ImmSrc = 3'b010;
@@ -168,7 +175,7 @@ always_comb begin
             3'b100: PCSrc = signedLess ? 2'b01 : 2'b00; // BLT
             3'b101: PCSrc = !signedLess ? 2'b01 : 2'b00; // BGE
             3'b110: PCSrc = unsignedLess ? 2'b01 : 2'b00; // BLTU
-            3'b111: PCSrc = !unsignedLess ? 2'b00 : 2'b01; // BGEU
+            3'b111: PCSrc = !unsignedLess ? 2'b01 : 2'b00; // BGEU
             default: PCSrc = 2'b00;
         endcase
     end
@@ -180,7 +187,8 @@ always_comb begin
         ResultSrc = 2'b10; // PC + 4
         PCSrc = 2'b01; // PC = PC + imm
         ALUControl = 4'bx;
-        ALUSrc = 1'bx;        
+        ALUSrcA = 0;
+        ALUSrcB = 1'bx;        
         ImmSrc = 3'b011;
     end
 
@@ -191,8 +199,9 @@ always_comb begin
         ResultSrc = 2'b10;
         PCSrc = 2'b10;
         ALUControl = 4'b0000;
-        ALUSrc = 1;
-        ImmSrc = 3'b011;
+        ALUSrcA = 0;
+        ALUSrcB = 1;
+        ImmSrc = 3'b000;
     end
 
     // LUI /
@@ -200,9 +209,10 @@ always_comb begin
         RegWrite = 1;
         MemWrite = 0;
         ResultSrc = 2'b00;
-        PCSrc = 2'bx;
+        PCSrc = 2'b00; // techinically dont care, but we set it to default value
         ALUControl = 4'b0111;
-        ALUSrc = 1;
+        ALUSrcA = 0;
+        ALUSrcB = 1;
         ImmSrc = 3'b100;
     end
 
@@ -213,13 +223,15 @@ always_comb begin
         ResultSrc = 2'b00;
         PCSrc = 2'b00;
         ALUControl = 4'b0000;
-        ALUSrc = 1;
+        ALUSrcA = 1;
+        ALUSrcB = 1;
         ImmSrc = 3'b100;
     end
 
     default: begin
         RegWrite = 0;
-        ALUSrc = 0;
+        ALUSrcA = 0;
+        ALUSrcB = 0;
         MemWrite = 0;
         ResultSrc = 2'b00;
         PCSrc = 2'b00;

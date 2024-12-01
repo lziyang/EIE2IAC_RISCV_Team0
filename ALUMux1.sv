@@ -1,15 +1,15 @@
 module ALUMux1 (
-    input logic [31:0] RD2,
-    input logic [31:0] ImmExt,
-    input logic ALUSrc,
-    output logic [31:0] SrcB
+    input logic [31:0] RD1,
+    input logic [31:0] PC,
+    input logic ALUSrcA,
+    output logic [31:0] SrcA
 );
 
 always_comb begin
-        if (ALUSrc) 
-            SrcB=ImmExt;
+        if (ALUSrcA) 
+            SrcA=PC;
         else 
-            SrcB=RD2;
+            SrcA=RD1;
     end
 
 endmodule

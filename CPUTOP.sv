@@ -9,7 +9,8 @@ module CPUTOP (
     logic [31:0] Instr;
     logic [31:0] ImmExt;
     logic RegWrite;
-    logic ALUSrc;
+    logic ALUSrcA;
+    logic ALUSrcB;
     logic [1:0] PCSrc;
     logic [3:0] ALUControl;
     logic Zero;
@@ -52,7 +53,8 @@ module CPUTOP (
         .signedLess(signedLess),
         .Instr(Instr),
         .RegWrite(RegWrite),
-        .ALUSrc(ALUSrc),
+        .ALUSrcA(ALUSrcA),
+        .ALUSrcB(ALUSrcB),
         .PCSrc(PCSrc),
         .ImmExt(ImmExt),
         .ALUControl(ALUControl),
@@ -69,7 +71,8 @@ module CPUTOP (
         .rs2(rs2),
         .rd(rd),
         .RegWrite(RegWrite),
-        .ALUSrc(ALUSrc),
+        .ALUSrcA(ALUSrcA),
+        .ALUSrcB(ALUSrcB),
         .ALUControl(ALUControl),
         .ImmExt(ImmExt),
         .MemWrite(MemWrite),
@@ -81,7 +84,8 @@ module CPUTOP (
         .a0(a0),
         .ResultExt(PCJALR),
         .SizeSrc(SizeSrc),
-        .LoadSign(LoadSign)
+        .LoadSign(LoadSign),
+        .PC(PC) // added PC into ALU
     );
 
 endmodule

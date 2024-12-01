@@ -4,7 +4,8 @@ module ALUTop (
     input logic [4:0] rs2,
     input logic [4:0] rd,
     input logic RegWrite,
-    input logic ALUSrc,
+    input logic ALUSrcA, // added SRCA for ALU
+    input logic ALUSrcB,
     input logic [3:0] ALUControl,
     input logic [31:0] ImmExt,
     input logic MemWrite,
@@ -12,6 +13,7 @@ module ALUTop (
     input logic LoadSign,
     input logic [1:0] SizeSrc,
     input logic [1:0] ResultSrc, // 加入resultsrc
+    input logic [31:0] PC, // added PC into ALU
     output logic Zero,
     output logic unsignedLess,
     output logic signedLess,
@@ -21,13 +23,14 @@ module ALUTop (
 
     logic [31:0] SrcA;
     logic [31:0] SrcB;
+    logic [31:0] RD1;
     logic [31:0] RD2;
     logic [31:0] ALUResult;
     logic [31:0] ReadData;
     logic [31:0] WriteData;
     logic [31:0] Result;
 
-    assign ResultExt = Result;
+    assign ResultExt = ALUResult;
 
 
 RegisterFile RegisterFile (
@@ -38,18 +41,26 @@ RegisterFile RegisterFile (
     .WD3(Result),
     .WE3(RegWrite),
     .a0(a0),
-    .RD1(SrcA),
+    .RD1(RD1),
     .RD2(RD2)
 );
 
+// added ALUMUX1
 ALUMux1 ALUMux1 (
-    .RD2(RD2),
-    .ImmExt(ImmExt),
-    .ALUSrc(ALUSrc),
-    .SrcB(SrcB)
+    .RD1(RD1),
+    .PC(PC),
+    .ALUSrcA(ALUSrcA),
+    .SrcA(SrcA)
 );
 
 ALUMux2 ALUMux2 (
+    .RD2(RD2),
+    .ImmExt(ImmExt),
+    .ALUSrcB(ALUSrcB),
+    .SrcB(SrcB)
+);
+
+ALUMux3 ALUMux3 (
     .ResultSrc(ResultSrc),
     .ALUResult(ALUResult),
     .ReadData(ReadData),
