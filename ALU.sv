@@ -27,7 +27,9 @@ module ALU(
             4'b0111: ALUResult = SrcB;
             4'b1000: ALUResult = SrcA << SrcB;
             4'b1001: ALUResult = SrcA >> SrcB;
-            4'b1010: ALUResult = SrcA >>> SrcB;   
+
+            4'b1010: ALUResult = $signed(SrcA) >>> SrcB[4:0];   // 4'b1010: ALUResult = SrcA >>> SrcB; sra 需要用signed
+
             default: ALUResult = 0;                     
         endcase
     end

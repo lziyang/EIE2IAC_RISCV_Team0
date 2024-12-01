@@ -44,7 +44,7 @@ always_ff @(posedge clk) begin
             2'b00: begin                            //sw
                 memory[address] <= WriteData[7:0];
                 memory[address+1] <= WriteData[15:8];
-                memory[address+2] <= WriteData[23:16]; 
+                memory[address+2] <= WriteData[23:16];
                 memory[address+3] <= WriteData[31:24];
             end               
             2'b01: begin                //sh
