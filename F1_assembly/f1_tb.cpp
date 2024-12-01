@@ -25,7 +25,7 @@ int main(int argc, char **argv, char **env) {
   // initialize simulation input 
   top->clk = 1;
   top->rst = 0;
-  top->en = 0;
+  top->trigger = 0;
 
 
   // run simulation for MAX_SIM_CYC clock cycles
@@ -37,11 +37,11 @@ int main(int argc, char **argv, char **env) {
       top->eval ();
     }
 
-    top->en = vbdFlag();
+    top->trigger = vbdFlag();
 
 
     vbdBar(top->data_out & 0xFF);
-    top->en = vbdFlag();
+    top->trigger = vbdFlag();
     vbdCycle(simcyc);
 
     // either simulation finished, or 'q' is pressed
