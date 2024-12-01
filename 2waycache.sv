@@ -1,5 +1,5 @@
 module 2waycache#(
-    parameter NUM_SET = 4;
+    parameter NUM_SET = 4
 )(
 
     input logic         clk,
@@ -40,7 +40,7 @@ always_comb begin
         Data = data_cache[Set][0];
     end
     else if (Hit1) begin
-        Data = data_cache[Set][0];
+        Data = data_cache[Set][1];
     end
     else begin
         Data = 32'b0;   //this is what happens when there is a miss - will be developed further
@@ -60,21 +60,20 @@ always_ff @(posedge clk or posedge rst) begin
         if(!Hit0 && !valid[Set][0]) begin
             valid[Set][0] <= 1'b1;
             tag_cache[Set][0] <= Tag;
-            data[Set][0] <= WriteDataM;
+            data_cache[Set][0] <= WriteDataM;
         end
         //checking if there is a miss at way1 and if there is space in set 1
         else if (!Hit1 && !valid[Set][1]) begin
             valid[Set][1] <= 1'b1;
             tag_cache[Set][1] <= Tag;
-            data[Set][1] <= WriteDataM;
+            data_cache[Set][1] <= WriteDataM;
         end
         //if there is no space in either, overwritten in way0
         else begin
             valid[Set][0] <= 1'b1;
             tag_cache[Set][0] <= Tag;
-            data[Set][0] <= WriteDataM;
+            data_cache[Set][0] <= WriteDataM;
         end
     end
 end
-
 endmodule
