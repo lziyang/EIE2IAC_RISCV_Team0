@@ -5,8 +5,7 @@ module InstrTop (
     input logic signedLess,
     output logic [31:0] Instr,
     output logic RegWrite, 
-    output logic ALUSrcA,
-    output logic ALUSrcB,
+    output logic ALUSrc,
     output logic [1:0] PCSrc,
     output logic [31:0] ImmExt,
     output logic [3:0] ALUControl,
@@ -21,19 +20,10 @@ module InstrTop (
     logic [2:0] funct3;
     logic [6:0] funct7;
 
-    // newly added, define the instr mem bytes
-    logic [7:0] Instr_memory [0:2**12-1];
-
-    // HexFileLoader
-    HexFileLoader HexFileLoader (
-        .Instr_memory(Instr_memory)
-    );
-
     // Altered InstructionMemory
     InstructionMemory InstructionMemory (
         .PC(PC),
-        .Instr(Instr),
-        .Instr_memory(Instr_memory)
+        .Instr(Instr)
     );
 
     ControlUnit ControlUnit (
@@ -41,8 +31,7 @@ module InstrTop (
         .Zero(Zero),
         .RegWrite(RegWrite),
         .ALUControl(ALUControl),
-        .ALUSrcA(ALUSrcA),
-        .ALUSrcB(ALUSrcB),
+        .ALUSrc(ALUSrc),
         .ImmSrc(ImmSrc),
         .PCSrc(PCSrc),
         .funct3(funct3),
