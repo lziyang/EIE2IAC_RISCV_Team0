@@ -1,6 +1,7 @@
 // Converts big endian machine code into small endian and separates bytes with spaces
-// To use: Enter big endian machine code into a .txt file "BigEndianProgram.txt"
-// Output will be generated as a "program.hex" file
+// Input: Enter big endian machine code into a .txt file "BigEndianProgram.txt" in same dir as this file
+// To run: Use command 'g++ MachineCodeConverter.cpp -o /tmp/MachineCodeConverter && /tmp/MachineCodeConverter' in terminal from same dir
+// Output: Generated as a "program.hex" file
 
 #include <iostream>
 #include <fstream>
