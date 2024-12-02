@@ -83,7 +83,13 @@ VL_INLINE_OPT void VCPUTOP___024root___sequent__TOP__0(VCPUTOP___024root* vlSelf
                                                     & (vlSelf->CPUTOP__DOT__Instr 
                                                        >> 7U))))) {
         __Vdlyvval__CPUTOP__DOT__ALUTop__DOT__RegisterFile__DOT__registerarr__v0 
-            = vlSelf->CPUTOP__DOT__ALUTop__DOT__Result;
+            = ((0U == (IData)(vlSelf->CPUTOP__DOT__ResultSrc))
+                ? vlSelf->CPUTOP__DOT__ALUTop__DOT__ALUResult
+                : ((1U == (IData)(vlSelf->CPUTOP__DOT__ResultSrc))
+                    ? vlSelf->CPUTOP__DOT__ALUTop__DOT__ReadData
+                    : ((2U == (IData)(vlSelf->CPUTOP__DOT__ResultSrc))
+                        ? ((IData)(4U) + vlSelf->CPUTOP__DOT__PC)
+                        : 0U)));
         __Vdlyvset__CPUTOP__DOT__ALUTop__DOT__RegisterFile__DOT__registerarr__v0 = 1U;
         __Vdlyvdim0__CPUTOP__DOT__ALUTop__DOT__RegisterFile__DOT__registerarr__v0 
             = (0x1fU & (vlSelf->CPUTOP__DOT__Instr 
@@ -126,20 +132,20 @@ VL_INLINE_OPT void VCPUTOP___024root___sequent__TOP__1(VCPUTOP___024root* vlSelf
                                 ? 0U : vlSelf->CPUTOP__DOT__PCTop__DOT__PCNext);
     vlSelf->CPUTOP__DOT__Instr = ((0xbfc00U == (vlSelf->CPUTOP__DOT__PC 
                                                 >> 0xcU))
-                                   ? ((vlSelf->CPUTOP__DOT__InstrTop__DOT____Vcellinp__InstructionMemory__Instr_memory
+                                   ? ((vlSelf->CPUTOP__DOT__InstrTop__DOT__InstructionMemory__DOT__Instr_memory
                                        [(0xfffU & ((IData)(3U) 
                                                    + vlSelf->CPUTOP__DOT__PC))] 
                                        << 0x18U) | 
-                                      ((vlSelf->CPUTOP__DOT__InstrTop__DOT____Vcellinp__InstructionMemory__Instr_memory
+                                      ((vlSelf->CPUTOP__DOT__InstrTop__DOT__InstructionMemory__DOT__Instr_memory
                                         [(0xfffU & 
                                           ((IData)(2U) 
                                            + vlSelf->CPUTOP__DOT__PC))] 
                                         << 0x10U) | 
-                                       ((vlSelf->CPUTOP__DOT__InstrTop__DOT____Vcellinp__InstructionMemory__Instr_memory
+                                       ((vlSelf->CPUTOP__DOT__InstrTop__DOT__InstructionMemory__DOT__Instr_memory
                                          [(0xfffU & 
                                            ((IData)(1U) 
                                             + vlSelf->CPUTOP__DOT__PC))] 
-                                         << 8U) | vlSelf->CPUTOP__DOT__InstrTop__DOT____Vcellinp__InstructionMemory__Instr_memory
+                                         << 8U) | vlSelf->CPUTOP__DOT__InstrTop__DOT__InstructionMemory__DOT__Instr_memory
                                         [(0xfffU & vlSelf->CPUTOP__DOT__PC)])))
                                    : 0U);
     vlSelf->CPUTOP__DOT__MemWrite = (IData)((0x23U 
@@ -220,11 +226,18 @@ VL_INLINE_OPT void VCPUTOP___024root___sequent__TOP__1(VCPUTOP___024root* vlSelf
             }
         }
     }
-    vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcA = vlSelf->CPUTOP__DOT__ALUTop__DOT__RegisterFile__DOT__registerarr
-        [(0x1fU & (vlSelf->CPUTOP__DOT__Instr >> 0xfU))];
     vlSelf->CPUTOP__DOT__ALUTop__DOT__RD2 = vlSelf->CPUTOP__DOT__ALUTop__DOT__RegisterFile__DOT__registerarr
         [(0x1fU & (vlSelf->CPUTOP__DOT__Instr >> 0x14U))];
+    vlSelf->CPUTOP__DOT__ALUSrcA = (IData)((0x17U == 
+                                            (0x7fU 
+                                             & vlSelf->CPUTOP__DOT__Instr)));
     vlSelf->CPUTOP__DOT__InstrTop__DOT__ImmSrc = 0U;
+    vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcA = ((IData)(vlSelf->CPUTOP__DOT__ALUSrcA)
+                                               ? vlSelf->CPUTOP__DOT__PC
+                                               : vlSelf->CPUTOP__DOT__ALUTop__DOT__RegisterFile__DOT__registerarr
+                                              [(0x1fU 
+                                                & (vlSelf->CPUTOP__DOT__Instr 
+                                                   >> 0xfU))]);
     if ((0x40U & vlSelf->CPUTOP__DOT__Instr)) {
         vlSelf->CPUTOP__DOT__RegWrite = (1U & (IData)(
                                                       ((0x20U 
@@ -275,7 +288,7 @@ VL_INLINE_OPT void VCPUTOP___024root___sequent__TOP__1(VCPUTOP___024root* vlSelf
                     if ((1U & vlSelf->CPUTOP__DOT__Instr)) {
                         vlSelf->CPUTOP__DOT__ResultSrc = 2U;
                         vlSelf->CPUTOP__DOT__ALUControl = 0U;
-                        vlSelf->CPUTOP__DOT__InstrTop__DOT__ImmSrc = 3U;
+                        vlSelf->CPUTOP__DOT__InstrTop__DOT__ImmSrc = 0U;
                     } else {
                         vlSelf->CPUTOP__DOT__ResultSrc = 0U;
                         vlSelf->CPUTOP__DOT__ALUControl = 0xfU;
@@ -306,11 +319,11 @@ VL_INLINE_OPT void VCPUTOP___024root___sequent__TOP__1(VCPUTOP___024root* vlSelf
             vlSelf->CPUTOP__DOT__ALUControl = 0xfU;
             vlSelf->CPUTOP__DOT__InstrTop__DOT__ImmSrc = 7U;
         }
-        vlSelf->CPUTOP__DOT__ALUSrc = (1U & (IData)(
-                                                    (0x27U 
-                                                     == 
-                                                     (0x3fU 
-                                                      & vlSelf->CPUTOP__DOT__Instr))));
+        vlSelf->CPUTOP__DOT__ALUSrcB = (1U & (IData)(
+                                                     (0x27U 
+                                                      == 
+                                                      (0x3fU 
+                                                       & vlSelf->CPUTOP__DOT__Instr))));
     } else if ((0x20U & vlSelf->CPUTOP__DOT__Instr)) {
         vlSelf->CPUTOP__DOT__RegWrite = (1U & (IData)(
                                                       ((0x10U 
@@ -378,11 +391,11 @@ VL_INLINE_OPT void VCPUTOP___024root___sequent__TOP__1(VCPUTOP___024root* vlSelf
                 vlSelf->CPUTOP__DOT__ALUControl = 0xfU;
                 vlSelf->CPUTOP__DOT__InstrTop__DOT__ImmSrc = 7U;
             }
-            vlSelf->CPUTOP__DOT__ALUSrc = (1U & (IData)(
-                                                        (7U 
-                                                         == 
-                                                         (0xfU 
-                                                          & vlSelf->CPUTOP__DOT__Instr))));
+            vlSelf->CPUTOP__DOT__ALUSrcB = (1U & (IData)(
+                                                         (7U 
+                                                          == 
+                                                          (0xfU 
+                                                           & vlSelf->CPUTOP__DOT__Instr))));
         } else {
             if ((8U & vlSelf->CPUTOP__DOT__Instr)) {
                 vlSelf->CPUTOP__DOT__ALUControl = 0xfU;
@@ -402,11 +415,11 @@ VL_INLINE_OPT void VCPUTOP___024root___sequent__TOP__1(VCPUTOP___024root* vlSelf
                 vlSelf->CPUTOP__DOT__ALUControl = 0xfU;
                 vlSelf->CPUTOP__DOT__InstrTop__DOT__ImmSrc = 7U;
             }
-            vlSelf->CPUTOP__DOT__ALUSrc = (1U & (IData)(
-                                                        (3U 
-                                                         == 
-                                                         (0xfU 
-                                                          & vlSelf->CPUTOP__DOT__Instr))));
+            vlSelf->CPUTOP__DOT__ALUSrcB = (1U & (IData)(
+                                                         (3U 
+                                                          == 
+                                                          (0xfU 
+                                                           & vlSelf->CPUTOP__DOT__Instr))));
         }
     } else if ((0x10U & vlSelf->CPUTOP__DOT__Instr)) {
         vlSelf->CPUTOP__DOT__RegWrite = (1U & ((~ (vlSelf->CPUTOP__DOT__Instr 
@@ -481,18 +494,18 @@ VL_INLINE_OPT void VCPUTOP___024root___sequent__TOP__1(VCPUTOP___024root* vlSelf
             vlSelf->CPUTOP__DOT__ALUControl = 0xfU;
             vlSelf->CPUTOP__DOT__InstrTop__DOT__ImmSrc = 7U;
         }
-        vlSelf->CPUTOP__DOT__ALUSrc = (1U & ((~ (vlSelf->CPUTOP__DOT__Instr 
-                                                 >> 3U)) 
-                                             & ((4U 
-                                                 & vlSelf->CPUTOP__DOT__Instr)
-                                                 ? 
-                                                ((vlSelf->CPUTOP__DOT__Instr 
-                                                  >> 1U) 
-                                                 & vlSelf->CPUTOP__DOT__Instr)
-                                                 : 
-                                                ((vlSelf->CPUTOP__DOT__Instr 
-                                                  >> 1U) 
-                                                 & vlSelf->CPUTOP__DOT__Instr))));
+        vlSelf->CPUTOP__DOT__ALUSrcB = (1U & ((~ (vlSelf->CPUTOP__DOT__Instr 
+                                                  >> 3U)) 
+                                              & ((4U 
+                                                  & vlSelf->CPUTOP__DOT__Instr)
+                                                  ? 
+                                                 ((vlSelf->CPUTOP__DOT__Instr 
+                                                   >> 1U) 
+                                                  & vlSelf->CPUTOP__DOT__Instr)
+                                                  : 
+                                                 ((vlSelf->CPUTOP__DOT__Instr 
+                                                   >> 1U) 
+                                                  & vlSelf->CPUTOP__DOT__Instr))));
     } else {
         vlSelf->CPUTOP__DOT__RegWrite = (1U & (IData)(
                                                       (3U 
@@ -522,11 +535,11 @@ VL_INLINE_OPT void VCPUTOP___024root___sequent__TOP__1(VCPUTOP___024root* vlSelf
             vlSelf->CPUTOP__DOT__ALUControl = 0xfU;
             vlSelf->CPUTOP__DOT__InstrTop__DOT__ImmSrc = 7U;
         }
-        vlSelf->CPUTOP__DOT__ALUSrc = (1U & (IData)(
-                                                    (3U 
-                                                     == 
-                                                     (0xfU 
-                                                      & vlSelf->CPUTOP__DOT__Instr))));
+        vlSelf->CPUTOP__DOT__ALUSrcB = (1U & (IData)(
+                                                     (3U 
+                                                      == 
+                                                      (0xfU 
+                                                       & vlSelf->CPUTOP__DOT__Instr))));
     }
     vlSelf->CPUTOP__DOT__ImmExt = ((4U & (IData)(vlSelf->CPUTOP__DOT__InstrTop__DOT__ImmSrc))
                                     ? ((2U & (IData)(vlSelf->CPUTOP__DOT__InstrTop__DOT__ImmSrc))
@@ -589,7 +602,7 @@ VL_INLINE_OPT void VCPUTOP___024root___sequent__TOP__1(VCPUTOP___024root* vlSelf
                                                 << 0xcU) 
                                                | (vlSelf->CPUTOP__DOT__Instr 
                                                   >> 0x14U)))));
-    vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcB = ((IData)(vlSelf->CPUTOP__DOT__ALUSrc)
+    vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcB = ((IData)(vlSelf->CPUTOP__DOT__ALUSrcB)
                                                ? vlSelf->CPUTOP__DOT__ImmExt
                                                : vlSelf->CPUTOP__DOT__ALUTop__DOT__RD2);
     vlSelf->CPUTOP__DOT__signedLess = VL_LTS_III(32, vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcA, vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcB);
@@ -602,25 +615,17 @@ VL_INLINE_OPT void VCPUTOP___024root___sequent__TOP__1(VCPUTOP___024root* vlSelf
             = ((4U & (IData)(vlSelf->CPUTOP__DOT__ALUControl))
                 ? 0U : ((2U & (IData)(vlSelf->CPUTOP__DOT__ALUControl))
                          ? ((1U & (IData)(vlSelf->CPUTOP__DOT__ALUControl))
-                             ? 0U : ((0x1fU >= vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcB)
-                                      ? (vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcA 
-                                         >> vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcB)
-                                      : 0U)) : ((1U 
-                                                 & (IData)(vlSelf->CPUTOP__DOT__ALUControl))
-                                                 ? 
-                                                ((0x1fU 
-                                                  >= vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcB)
-                                                  ? 
-                                                 (vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcA 
-                                                  >> vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcB)
-                                                  : 0U)
-                                                 : 
-                                                ((0x1fU 
-                                                  >= vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcB)
-                                                  ? 
-                                                 (vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcA 
-                                                  << vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcB)
-                                                  : 0U))));
+                             ? 0U : VL_SHIFTRS_III(32,32,5, vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcA, 
+                                                   (0x1fU 
+                                                    & vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcB)))
+                         : ((1U & (IData)(vlSelf->CPUTOP__DOT__ALUControl))
+                             ? ((0x1fU >= vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcB)
+                                 ? (vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcA 
+                                    >> vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcB)
+                                 : 0U) : ((0x1fU >= vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcB)
+                                           ? (vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcA 
+                                              << vlSelf->CPUTOP__DOT__ALUTop__DOT__SrcB)
+                                           : 0U))));
     } else if ((4U & (IData)(vlSelf->CPUTOP__DOT__ALUControl))) {
         vlSelf->CPUTOP__DOT__ALUTop__DOT__ALUResult 
             = ((2U & (IData)(vlSelf->CPUTOP__DOT__ALUControl))
@@ -698,8 +703,8 @@ VL_INLINE_OPT void VCPUTOP___024root___sequent__TOP__1(VCPUTOP___024root* vlSelf
                                                           & vlSelf->CPUTOP__DOT__Instr)
                                                           ? 
                                                          ((IData)(vlSelf->CPUTOP__DOT__unsignedLess)
-                                                           ? 1U
-                                                           : 0U)
+                                                           ? 0U
+                                                           : 1U)
                                                           : 
                                                          ((IData)(vlSelf->CPUTOP__DOT__unsignedLess)
                                                            ? 1U
@@ -790,20 +795,6 @@ VL_INLINE_OPT void VCPUTOP___024root___sequent__TOP__1(VCPUTOP___024root* vlSelf
     } else {
         vlSelf->CPUTOP__DOT__ALUTop__DOT__ReadData = 0U;
     }
-    vlSelf->CPUTOP__DOT__ALUTop__DOT__Result = ((0U 
-                                                 == (IData)(vlSelf->CPUTOP__DOT__ResultSrc))
-                                                 ? vlSelf->CPUTOP__DOT__ALUTop__DOT__ALUResult
-                                                 : 
-                                                ((1U 
-                                                  == (IData)(vlSelf->CPUTOP__DOT__ResultSrc))
-                                                  ? vlSelf->CPUTOP__DOT__ALUTop__DOT__ReadData
-                                                  : 
-                                                 ((2U 
-                                                   == (IData)(vlSelf->CPUTOP__DOT__ResultSrc))
-                                                   ? 
-                                                  ((IData)(4U) 
-                                                   + vlSelf->CPUTOP__DOT__PC)
-                                                   : 0U)));
     vlSelf->CPUTOP__DOT__PCTop__DOT__PCNext = ((0U 
                                                 == (IData)(vlSelf->CPUTOP__DOT__PCSrc))
                                                 ? ((IData)(4U) 
@@ -817,7 +808,7 @@ VL_INLINE_OPT void VCPUTOP___024root___sequent__TOP__1(VCPUTOP___024root* vlSelf
                                                     : 
                                                    ((2U 
                                                      == (IData)(vlSelf->CPUTOP__DOT__PCSrc))
-                                                     ? vlSelf->CPUTOP__DOT__ALUTop__DOT__Result
+                                                     ? vlSelf->CPUTOP__DOT__ALUTop__DOT__ALUResult
                                                      : 
                                                     ((IData)(4U) 
                                                      + vlSelf->CPUTOP__DOT__PC))));

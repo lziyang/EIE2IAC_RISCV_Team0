@@ -40,7 +40,7 @@ int main(int argc, char **argv, char **env) {
     //top->trigger = vbdFlag();
 
 
-    vbdBar(top->data_out & 0xFF);
+    vbdBar(top->a0 & 0xFF);
     //top->trigger = vbdFlag();
     vbdCycle(simcyc);
 
