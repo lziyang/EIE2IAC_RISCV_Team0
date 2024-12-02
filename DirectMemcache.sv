@@ -1,5 +1,5 @@
 module DirectMemcache#(
-    parameter NUM_SET = 8;
+    parameter NUM_SET = 8
 )(
 
     input logic         clk,
@@ -44,9 +44,9 @@ end
 //synchronous cycle for write operation
 always_ff @(posedge clk or posedge rst) begin
     if (rst) begin  //initialising the cache
-        for(i=0; i<NUM_SET; i++){
+        for(int i=0; i<NUM_SET; i++) begin
             valid[i] <= 1'b0;
-        }
+        end
     end
     else if (MemWriteM) begin //writing into cache
         //if cache is full, data would be replaced with new
