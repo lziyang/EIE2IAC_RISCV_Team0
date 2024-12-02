@@ -50,10 +50,10 @@ end
 //synchronous cycle for write operation
 always_ff @(posedge clk or posedge rst) begin
     if (rst) begin  //initialising the cache
-        for(i=0; i<NUM_SET; i++){
+        for(i=0; i<NUM_SET; i++) begin
             valid[i][0] <= 1'b0;
             valid[i][1] <= 1'b0;
-        }
+        end
     end
     else if (MemWriteM |!Hit) begin //writing into cache 
         //checking if there is a miss at way0 and if there is space in set 0
