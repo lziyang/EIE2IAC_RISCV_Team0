@@ -4,7 +4,7 @@ module ALUTop (
     input logic [4:0] rs2,
     input logic [4:0] rd,
     input logic RegWrite,
-    input logic ALUSrcA, // added SRCA for ALU
+    input logic ALUSrcA,
     input logic ALUSrcB,
     input logic [3:0] ALUControl,
     input logic [31:0] ImmExt,
@@ -12,8 +12,9 @@ module ALUTop (
     input logic [31:0] PCPlus4,
     input logic LoadSign,
     input logic [1:0] SizeSrc,
-    input logic [1:0] ResultSrc, // 加入resultsrc
-    input logic [31:0] PC, // added PC into ALU
+    input logic [1:0] ResultSrc, 
+    input logic [31:0] PC, 
+    input logic trigger,
     output logic Zero,
     output logic unsignedLess,
     output logic signedLess,
@@ -42,10 +43,11 @@ RegisterFile RegisterFile (
     .WE3(RegWrite),
     .a0(a0),
     .RD1(RD1),
-    .RD2(RD2)
+    .RD2(RD2),
+    .trigger(trigger)
 );
 
-// added ALUMUX1
+
 ALUMux1 ALUMux1 (
     .RD1(RD1),
     .PC(PC),
@@ -79,13 +81,13 @@ ALU ALU (
 );
 
 DataMemory DataMemory (
-        .clk(clk),
-        .MemWrite(MemWrite),
-        .LoadSign(LoadSign),
-        .SizeSrc(SizeSrc),
-        .WriteData(WriteData),
-        .ALUResult(ALUResult),
-        .ReadData(ReadData)
+    .clk(clk),
+    .MemWrite(MemWrite),
+    .LoadSign(LoadSign),
+    .SizeSrc(SizeSrc),
+    .WriteData(WriteData),
+    .ALUResult(ALUResult),
+    .ReadData(ReadData)
     );
 
     assign WriteData = RD2;
