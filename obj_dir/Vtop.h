@@ -5,20 +5,20 @@
 // The class here is then constructed to instantiate the design.
 // See the Verilator manual for examples.
 
-#ifndef VERILATED_VCPUTOP_H_
-#define VERILATED_VCPUTOP_H_  // guard
+#ifndef VERILATED_VTOP_H_
+#define VERILATED_VTOP_H_  // guard
 
 #include "verilated.h"
 
-class VCPUTOP__Syms;
-class VCPUTOP___024root;
+class Vtop__Syms;
+class Vtop___024root;
 class VerilatedVcdC;
 
 // This class is the main interface to the Verilated model
-class VCPUTOP VL_NOT_FINAL : public VerilatedModel {
+class Vtop VL_NOT_FINAL : public VerilatedModel {
   private:
     // Symbol table holding complete model state (owned by this class)
-    VCPUTOP__Syms* const vlSymsp;
+    Vtop__Syms* const vlSymsp;
 
   public:
 
@@ -27,6 +27,7 @@ class VCPUTOP VL_NOT_FINAL : public VerilatedModel {
     // propagate new values into/out from the Verilated model.
     VL_IN8(&clk,0,0);
     VL_IN8(&rst,0,0);
+    VL_IN8(&trigger,0,0);
     VL_OUT(&a0,31,0);
 
     // CELLS
@@ -35,19 +36,19 @@ class VCPUTOP VL_NOT_FINAL : public VerilatedModel {
 
     // Root instance pointer to allow access to model internals,
     // including inlined /* verilator public_flat_* */ items.
-    VCPUTOP___024root* const rootp;
+    Vtop___024root* const rootp;
 
     // CONSTRUCTORS
     /// Construct the model; called by application code
     /// If contextp is null, then the model will use the default global context
     /// If name is "", then makes a wrapper with a
     /// single model invisible with respect to DPI scope names.
-    explicit VCPUTOP(VerilatedContext* contextp, const char* name = "TOP");
-    explicit VCPUTOP(const char* name = "TOP");
+    explicit Vtop(VerilatedContext* contextp, const char* name = "TOP");
+    explicit Vtop(const char* name = "TOP");
     /// Destroy the model; called (often implicitly) by application code
-    virtual ~VCPUTOP();
+    virtual ~Vtop();
   private:
-    VL_UNCOPYABLE(VCPUTOP);  ///< Copying not allowed
+    VL_UNCOPYABLE(Vtop);  ///< Copying not allowed
 
   public:
     // API METHODS
