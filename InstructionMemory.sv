@@ -3,7 +3,7 @@ module InstructionMemory(
     output logic [31:0] Instr
 );
 
-    logic [7:0] Instr_memory [2**12-1:0]; // 4 KB instruction memory (0x1000 bytes)
+    logic [7:0] Instr_memory [32'hBFC00000:32'hBFC00FFF]; // 4 KB instruction memory (0x1000 bytes)
 
     initial begin
         $readmemh("program.hex", Instr_memory); // Load instructions from a hex file
