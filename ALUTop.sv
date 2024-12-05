@@ -44,7 +44,7 @@ RegisterFile RegisterFile (
     .a0(a0),
     .RD1(RD1),
     .RD2(RD2),
-    .trigger(trigger)
+    .trigger(trigger) //trigger added(compatible for just F1 currently)
 );
 
 
