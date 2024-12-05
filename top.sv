@@ -1,11 +1,3 @@
-module CPUTOP (
-    input logic clk,
-    input logic rst,
-    output logic [31:0] a0
-);
-
-    // Internal signals
-    logic [31:0] PC;
 module top (
     input logic clk,
     input logic rst,
