@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cstdio>
 
-#define MAX_SIM_CYC 500 // Maximum simulation cycles
+#define MAX_SIM_CYC 50 // Maximum simulation cycles
 
 int main(int argc, char **argv, char **env)
 {

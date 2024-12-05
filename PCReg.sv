@@ -1,19 +1,19 @@
 module PCReg (
     input logic clk,
     input logic rst,
-    input logic [31:0] PCNext,
-    output logic [31:0] PC
+    input logic [31:0] PCNext_F,
+    output logic [31:0] PC_F
 );
 
     initial begin
-        PC = 32'hBFC00000; 
+        PC_F = 32'hBFC00000; 
     end
 
     always_ff @(posedge clk or posedge rst) begin
         if (rst)
-            PC <= 32'h0;
+            PC_F <= 32'hBFC00000;
         else
-            PC <= PCNext;
+            PC_F <= PCNext_F;
     end
 
 endmodule
