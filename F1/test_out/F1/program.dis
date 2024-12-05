@@ -8,33 +8,33 @@ start address 0xbfc00000
 Disassembly of section .text:
 
 bfc00000 <init>:
-bfc00000:	00000293          	li	t0,0
-bfc00004:	0ff00513          	li	a0,255
+bfc00000:	00000513          	li	a0,0
+bfc00004:	0ff00293          	li	t0,255
 bfc00008:	00000e13          	li	t3,0
 bfc0000c:	00000f13          	li	t5,0
-bfc00010:	00000713          	li	a4,0
+bfc00010:	00000313          	li	t1,0
 bfc00014:	01000613          	li	a2,16
 bfc00018:	00000693          	li	a3,0
 
 bfc0001c <seed_generation>:
 bfc0001c:	001f0f13          	addi	t5,t5,1
 bfc00020:	0fff7f13          	zext.b	t5,t5
-bfc00024:	fe070ce3          	beqz	a4,bfc0001c <seed_generation>
-bfc00028:	00000713          	li	a4,0
+bfc00024:	fe030ce3          	beqz	t1,bfc0001c <seed_generation>
+bfc00028:	00000313          	li	t1,0
 bfc0002c:	000f0e13          	mv	t3,t5
 bfc00030:	0040006f          	j	bfc00034 <main>
 
 bfc00034 <main>:
 bfc00034:	024000ef          	jal	ra,bfc00058 <delay>
-bfc00038:	00129293          	slli	t0,t0,0x1
-bfc0003c:	00128293          	addi	t0,t0,1
+bfc00038:	00151513          	slli	a0,a0,0x1
+bfc0003c:	00150513          	addi	a0,a0,1
 bfc00040:	fc0690e3          	bnez	a3,bfc00000 <init>
-bfc00044:	fea298e3          	bne	t0,a0,bfc00034 <main>
-bfc00048:	00a28263          	beq	t0,a0,bfc0004c <all_lights_on>
+bfc00044:	fe5518e3          	bne	a0,t0,bfc00034 <main>
+bfc00048:	00550263          	beq	a0,t0,bfc0004c <all_lights_on>
 
 bfc0004c <all_lights_on>:
 bfc0004c:	024000ef          	jal	ra,bfc00070 <random_delay>
-bfc00050:	00000293          	li	t0,0
+bfc00050:	00000513          	li	a0,0
 bfc00054:	fadff06f          	j	bfc00000 <init>
 
 bfc00058 <delay>:
