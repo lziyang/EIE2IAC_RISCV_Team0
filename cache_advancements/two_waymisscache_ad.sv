@@ -6,6 +6,7 @@ module two_waymisscache_ad#(
     input logic         clk,
     input logic         rst,
     input logic         MemWriteM,  //write enable signal
+    input logic         MemReadM,   //read enable signal
     input logic [31:0]  ALUResultM, //memory address
     input logic [31:0]  WriteDataM, //data to be written to
     output logic        Hit,        //cache hit
@@ -22,7 +23,7 @@ module two_waymisscache_ad#(
 
 //using word addressing (can change but should still be compatible with data memory)
 logic valid [NUM_SET-1:0][1:0];       //valid bit array with 2 ways per set
-logic [31:0] memory [2**31:0]; //can make this smaller - max is 1GB
+//logic [31:0] memory [2**31:0]; //can make this smaller - max is 1GB
 logic [27:0] tag_cache [NUM_SET-1:0][1:0]; //tag array with 2 ways per set       
 logic [31:0] data_cache [NUM_SET-1:0][1:0]; //data array with 2 ways per set
 logic dirty_bit [NUM_SET-1:0][1:0];
