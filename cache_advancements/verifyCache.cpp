@@ -22,11 +22,14 @@ public:
     {
         top->clk = 0;
         top->rst = 0;
-        top->MemWriteM = 0;
+        top->MemWrite_wire = 0;
+        top->MemRead_wire = 0;
         top->ALUResultM = 0;
-        top->WriteDataM = 0;
+        top->MemWriteData_wire = 0;
         top->Datamem_wire = 0;
-        top->MemValid_wire = 0; 
+        top->MemValid_wire = 0;
+        top->Data = 0;
+        top->MemAddress_wire = 0;
     }
 
     void runReset()
@@ -56,18 +59,21 @@ public:
 
     void writeToCache(uint32_t address, uint32_t data){
         top->ALUResultM = address;
-        top->WriteDataM = data;
-        top->MemWriteM = 1;
+        top->MemWriteData_wire = data;
+        top->MemWrite_wire = 1;
+        top->MemRead_wire = 0;
         runSimulation();
-        top->MemWriteM = 0;
+        top->MemWrite_wire = 0;
     }
 
-    void readFromCache(uint32_t address, uint2_t &dataout, bool &hit, bool &miss){
+    void readFromCache(uint32_t address, uint32_t &dataout, bool &hit, bool &miss){
         top->ALUResultM = address;
+        top->MemRead_wire = 1;
         runSimulation();
         dataout = top->Data;
-        hit = top->hit;
-        miss = top->miss;
+        hit = top->Hit;
+        miss = top->Miss;
+        top->MemRead_wire = 0;
     }
 };
 
@@ -82,7 +88,7 @@ TEST_F(TwoWayMissCacheTest, TestCacheHit){
     
     EXPECT_TRUE(hit);
     EXPECT_FALSE(miss);
-    EXPECT_EQ(dataout, data)
+    EXPECT_EQ(dataout, data);
 }
 
 TEST_F(TwoWayMissCacheTest, TestCacheMiss){
@@ -106,7 +112,7 @@ TEST_F(TwoWayMissCacheTest, TestWriteBack){
     writeToCache(address2, dataout2);
 
     EXPECT_EQ(top->MemWrite_wire, 1);
-    EXPECT_EQ(top->MemWriteData_wire, data1);
+    EXPECT_EQ(top->MemWriteData_wire, dataout1);
 }
 
 int main(int argc, char **argv)

@@ -5,15 +5,12 @@ module two_waymisscache_ad#(
 
     input logic         clk,
     input logic         rst,
-    input logic         MemWriteM,  //write enable signal
-    input logic         MemReadM,   //read enable signal
     input logic [31:0]  ALUResultM, //memory address
-    input logic [31:0]  WriteDataM, //data to be written to
-    output logic        Hit,        //cache hit
-    output logic        Miss,       //cache miss
     output logic [31:0] Data,       //This output connects to ReadDataW
     input wire [31:0]   Datamem_wire, //this returns the data from data mem
     input wire          MemValid_wire,     //once the data memory has finished its cycle, this would be active
+    output logic        Hit,
+    output logic        Miss,
     output wire         MemRead_wire,      //signal to read from memory 
     output wire         MemWrite_wire,     //signal to write from memory
     output wire [31:0]  MemAddress_wire,   //address sent to memory
@@ -30,44 +27,48 @@ logic dirty_bit [NUM_SET-1:0][1:0];
 logic [31:0] latched_data;
 logic Hit1;
 logic Hit0;
+logic MemWriteM;
+logic MemReadM;
+logic [31:0] WriteDataM;
+//logic Hit;      //cache hit
+//logic Miss; 
+logic Miss_comb;
 
 //splitting memory address
 logic [27:0] Tag;
 logic [1:0] Set;
-logic [1:0] Offset;
 
 assign Tag = ALUResultM[31:4];
 assign Set = ALUResultM[3:2];
-assign Offset = ALUResultM[1:0];
 
 //asynchronous cycle for read operations
 always_comb begin
     Hit0 = valid[Set][0] && (Tag == tag_cache[Set][0]);
     Hit1 = valid[Set][1] && (Tag == tag_cache[Set][1]);
     Hit = Hit1 || Hit0;
+    Data = 32'b0;
+    Miss_comb = 1'b1;
     if (Hit0) begin
         Data = data_cache[Set][0];
-        Miss = 1'b0;
+        Miss_comb = 1'b0;
     end
     else if (Hit1) begin
         Data = data_cache[Set][1];
-        Miss = 1'b0;
-    end
-    else begin
-        Miss = 1'b1; //handling a miss
+        Miss_comb = 1'b0;
     end
 end
 
 //must always assign wire OUTSIDE the always blocks
 //must amend data memory to include this wire as an input
 //these are the wire outputs
-assign MemRead_wire = Miss && !MemWriteM;
+assign MemRead_wire = Miss_comb && !MemWriteM;
 assign MemWrite_wire = MemWriteM;
 assign MemAddress_wire = ALUResultM;
 assign MemWriteData_wire = WriteDataM;
 
 //synchronous cycle for write operation
 always_ff @(posedge clk or posedge rst) begin
+    Miss <= Miss_comb;
     if (rst) begin  //initialising the cache
         for(int i=0; i<NUM_SET; i++) begin
             valid[i][0] <= 1'b0;
