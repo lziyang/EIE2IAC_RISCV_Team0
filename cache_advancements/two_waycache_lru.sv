@@ -8,8 +8,6 @@ module two_waycache_lru#(
     input logic         MemWriteM,  //write enable signal
     input logic [31:0]  ALUResultM, //memory address
     input logic [31:0]  WriteDataM, //data to be written to
-    output logic        Hit,        //cache hit
-    output logic        Miss,       //cache miss
     output logic [31:0] Data,       //This output connects to ReadDataW
     input wire [31:0]   Datamem_wire, //this returns the data from data mem
     input wire          MemValid_wire,     //once the data memory has finished its cycle, this would be active
@@ -28,6 +26,8 @@ logic [31:0] data_cache [NUM_SET-1:0][1:0]; //data array with 2 ways per set
 logic dirty_bit [NUM_SET-1:0][1:0];
 logic [31:0] latched_data;
 logic latched_write;
+logic Hit; //cache hit
+logic Miss; //cache miss 
 logic Hit1;
 logic Hit0;
 logic [1:0] lru_bit [NUM_SET-1:0][1:0]; //lru bit for each block in way 1 and way 0
