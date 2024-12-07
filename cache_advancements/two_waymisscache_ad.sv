@@ -30,8 +30,6 @@ logic Hit0;
 logic MemWriteM;
 logic MemReadM;
 logic [31:0] WriteDataM;
-//logic Hit;      //cache hit
-//logic Miss; 
 logic Miss_comb;
 
 //splitting memory address
